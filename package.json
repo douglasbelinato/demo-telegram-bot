@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/douglasbelinato/demo-telegram-bot/issues"
   },
-  "homepage": "https://github.com/douglasbelinato/demo-telegram-bot#readme"
+  "homepage": "https://github.com/douglasbelinato/demo-telegram-bot#readme",
+  "dependencies": {
+    "telegraf": "3.17.3"
+  }
 }
