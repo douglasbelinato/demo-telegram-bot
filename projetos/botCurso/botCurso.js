@@ -65,4 +65,22 @@ bot.on('text', async ctx => {
     await ctx.reply('Isso mostra que eu consigo ler e processar sua mensagem', tecladoOpcoes)
 })
 
+bot.on('location', async ctx => {    
+    try {
+        
+        const url = 'http://api.openweathermap.org/data/2.5/weather'
+        const appId = '' // Necessário cadastro no site do api openweathermap para gerar appid
+        const { latitude: lat, longitude: lon } = ctx.message.location
+        const params = `?lat=${lat}&lon=${lon}&appid=${appId}&units=metric`
+        
+        const response = await axios.get(url + params)
+
+        await ctx.reply(`Você está em ${response.data.name}`)
+        await ctx.reply(`A temperatura é de ${response.data.main.temp}ºC`, tecladoOpcoes)
+    } catch (e) {
+        console.error(e)
+        ctx.reply('Desculpe, não consegui consultar a temperatura do local onde você está', tecladoOpcoes)       
+    }
+})
+
 bot.startPolling()
