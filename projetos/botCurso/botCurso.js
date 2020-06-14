@@ -6,7 +6,7 @@ const axios = require('axios')
 const bot = new Telegraf(env.token)
 
 const tecladoOpcoes = Markup.keyboard([
-    ['O que são bots?', 'O que verei no curso'],
+    ['O que são bots?', 'O que verei no curso?'],
     ['Posso mesmo automatizar tarefas?'],
     ['Como comprar o curso?']
 ]).resize().extra()
@@ -24,6 +24,45 @@ bot.start(async ctx => {
     const name = ctx.update.message.from.first_name
     await ctx.replyWithMarkdown(`*Olá ${name}*\nEu sou o ChatBot do curso`)
     await ctx.replyWithMarkdown('_Posso te ajudar em algo?_', tecladoOpcoes)
+})
+
+bot.hears('O que são bots?', ctx => {
+    ctx.replyWithMarkdown('*Bot*, diminutivo de _robot_, também conhecido como Internet bot ou web robot,' +
+                          'é uma aplicação de software concebido para simular ações humanas repetidas ' +
+                          'vezes de maneira padrão, da mesma forma como faria um robô. (Fonte: Wikipedia)', tecladoOpcoes)
+})
+
+bot.hears('O que verei no curso?', async ctx => {
+    await ctx.replyWithMarkdown('_Nós_ construiremos *3 bots*!')
+    await ctx.reply('1. Bot lista de compras')
+    await ctx.reply('2. Bot lista de eventos')
+    await ctx.reply('3. Um que será a minha cópia =)', tecladoOpcoes)
+})
+
+
+bot.hears('Posso mesmo automatizar tarefas?', ctx => {
+    ctx.replyWithMarkdown('Claro! Quer uma amostra?', botoes)
+})
+
+bot.hears('Como comprar o curso?', ctx => {
+    ctx.replyWithMarkdown('Basta accesar este [link](https://www.cod3r.com.br)')
+})
+
+bot.action('n', ctx => ctx.reply('Tudo bem', tecladoOpcoes))
+
+bot.action('s', async ctx => {
+    await ctx.reply('Legal! Me mande sua localização ou escreva um texto qualquer', localizacao)
+})
+
+bot.hears(/texto qualquer/i, async ctx => {
+    await ctx.reply('Essa piada é velha hein! Tente outra =)', tecladoOpcoes)
+})
+
+bot.on('text', async ctx => {
+    let msg = ctx.message.text
+    msg = msg.split(' ').reverse().join('')
+    await ctx.reply(`a sua mensagem ao contrário é: ${msg}`)
+    await ctx.reply('Isso mostra que eu consigo ler e processar sua mensagem', tecladoOpcoes)
 })
 
 bot.startPolling()
