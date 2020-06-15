@@ -4,7 +4,6 @@ const Markup = require('telegraf/markup')
 const axios = require('axios')
 
 const chatId = env.authorized_client_ids[0]
-console.log(chatId)
 
 const enviarMensagem = msg => {    
     axios.get(`${env.apiUrl}/sendMessage?chat_id=${chatId}&text=${encodeURI(msg)}`)
