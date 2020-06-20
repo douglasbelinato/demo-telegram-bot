@@ -19,7 +19,7 @@ const getTarefa = async id => {
     return response.data
 }
 
-const getTarefasPendentes = async () => {
+const getTarefasSemPrevisao = async () => {
     const url = `${baseUrl}?_sort=descricao&_order=asc`
     console.log('getTarefasPendentes - url', url)
     const response = await axios.get(url)
@@ -28,7 +28,7 @@ const getTarefasPendentes = async () => {
 
 const getTarefasConcluidas = async () => {
     const url = `${baseUrl}?_sort=dt_previsao,descricao&_order=asc`
-    console.log('getTarefasPendentes - url', url)
+    console.log('getTarefasConcluidas - url', url)
     const response = await axios.get(url)
     return response.data.filter(tarefa => tarefa.dt_conclusao !== null)
 }
@@ -41,14 +41,19 @@ const incluirTarefa = async desc => {
     return response.data
 }
 
-const concluirTarefa = async id => {
-    const tarefa = await getTarefa(id)
-    const tarefaAtualizada = { ...tarefa, dt_conclusao: moment().format('YYYY-MM-DD')}
+const atualizarTarefa = async (id, tarefaAtualizada) => {    
     const url = `${baseUrl}/${id}`
-    console.log('concluirTarefa - url', url)
+    console.log('atualizarTarefa - url', url)
     console.log('payload', tarefaAtualizada)
     const response = await axios.put(url, tarefaAtualizada)
     return response.data
+}
+
+const concluirTarefa = async id => {
+    console.log('concluirTarefa')
+    const tarefa = await getTarefa(id)
+    const tarefaAtualizada = { ...tarefa, dt_conclusao: moment().format('YYYY-MM-DD')}
+    return await atualizarTarefa(id, tarefaAtualizada)
 }
 
 const excluirTarefa = async id => {
@@ -57,12 +62,28 @@ const excluirTarefa = async id => {
     await axios.delete(url)
 }
 
+const atualizarDataTarefa = async (idTarefa, data) => {
+    const tarefa = await getTarefa(idTarefa)
+    const tarefaAtualizada = { ...tarefa, dt_previsao: data.format('YYYY-MM-DD')}
+    return await atualizarTarefa(idTarefa, tarefaAtualizada)
+}
+
+const atualizarObsTarefa = async (idTarefa, obs) => {
+    console.log('atualizarDataTarefa')
+    const tarefa = await getTarefa(idTarefa)
+    const tarefaAtualizada = { ...tarefa, observacao: obs}
+    return await atualizarTarefa(idTarefa, tarefaAtualizada)
+}
+
 module.exports = {
     getAgenda,
     getTarefa,
-    getTarefasPendentes,
+    getTarefasSemPrevisao,
     getTarefasConcluidas,    
     incluirTarefa,
+    atualizarTarefa,
     concluirTarefa,
-    excluirTarefa
+    excluirTarefa,
+    atualizarDataTarefa,
+    atualizarObsTarefa
 }
