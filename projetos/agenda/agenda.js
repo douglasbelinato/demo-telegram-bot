@@ -51,9 +51,59 @@ bot.command('dia', async ctx => {
     ctx.reply('Aqui está sua agenda do dia', botoesAgenda(tarefas))
 })
 
+bot.command('amanha', async ctx => {
+    const tarefas = await agendaServicos.getAgenda(moment().add({ day: 1 }))
+    ctx.reply('Aqui está sua agenda até amanhã', botoesAgenda(tarefas))
+})
+
+bot.command('semana', async ctx => {
+    const tarefas = await agendaServicos.getAgenda(moment().add({ week: 1 }))
+    ctx.reply('Aqui está sua agenda da semana', botoesAgenda(tarefas))
+})
+
+bot.command('concluidas', async ctx => {
+    const tarefas = await agendaServicos.getTarefasConcluidas()
+    if (tarefas && tarefas.length > 0) {
+        ctx.reply('Estas são as tarefas que você já concluiu', botoesAgenda(tarefas))
+    } else {
+        ctx.reply('Você não tem tarefas concluídas ainda', botoesAgenda(tarefas))
+    }
+})
+
+bot.command('tarefasPendentes', async ctx => {
+    const tarefas = await agendaServicos.getTarefasPendentes()
+    if (tarefas && tarefas.length > 0) {
+        ctx.reply('Estas são as tarefas pendentes', botoesAgenda(tarefas))
+    } else {
+        ctx.reply('Você não tem tarefas pendentes', botoesAgenda(tarefas))
+    }
+        
+})
+
 // Ações ------------------------------
 bot.action(/mostrar (.+)/, async ctx => {
     await exibirTarefa(ctx, ctx.match[1])
+})
+
+bot.action(/concluir (.+)/, async ctx => {
+    await agendaServicos.concluirTarefa(ctx.match[1])
+    await exibirTarefa(ctx, ctx.match[1])
+    await ctx.reply('Tarefa concluída')
+})
+
+bot.action(/excluir (.+)/, async ctx => {
+    await agendaServicos.excluirTarefa(ctx.match[1])
+    await ctx.editMessageText('Tarefa excluída')
+})
+
+// Incluir uma nova tarefa ---------------
+bot.on('text', async ctx => {
+    try {
+        const tarefa = await agendaServicos.incluirTarefa(ctx.update.message.text)
+        await exibirTarefa(ctx, tarefa.id, true)
+    } catch (e) {
+        console.error(e)
+    }
 })
 
 bot.startPolling()
