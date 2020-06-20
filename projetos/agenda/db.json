@@ -13,20 +13,6 @@
       "dt_previsao": "2020-06-17",
       "dt_conclusao": null,
       "observacao": "Validar edição"
-    },
-    {
-      "descricao": "Dark ep",
-      "dt_previsao": null,
-      "dt_conclusao": "2020-06-20",
-      "observacao": null,
-      "id": 3
-    },
-    {
-      "descricao": "Fate",
-      "dt_previsao": "2020-06-21",
-      "dt_conclusao": "2020-06-20",
-      "observacao": null,
-      "id": 4
     }
   ]
 }
