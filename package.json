@@ -19,7 +19,7 @@
   "homepage": "https://github.com/douglasbelinato/demo-telegram-bot#readme",
   "dependencies": {
     "axios": "0.18.1",
-    "moment": "2.20.1",
+    "moment": "2.29.4",
     "node-schedule": "1.3.0",
     "telegraf": "3.17.3"
   }
